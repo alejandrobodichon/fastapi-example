@@ -1,0 +1,35 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Database
+*.db
+*.sqlite3
+
+# User uploads
+media/profile_pics/*
+!media/profile_pics/.gitkeep
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# macOS / IDE
+.DS_Store
+.idea/
+.vscode/

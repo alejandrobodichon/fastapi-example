@@ -1,0 +1,26 @@
+[project]
+name = "fastapi-example"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Alejandro Bodichon", email = "" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "aiosqlite>=0.22.1",
+    "fastapi[standard]>=0.141.1",
+    "sqlalchemy>=2.0.51",
+]
+
+[project.scripts]
+fastapi-example = "fastapi_example:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.2",
+]
