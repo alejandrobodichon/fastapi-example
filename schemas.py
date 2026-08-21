@@ -2,39 +2,45 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
+from custom_types import Lower
+
 
 class UserBase(BaseModel):
     username: str = Field(min_length=1, max_length=50)
-    email: EmailStr = Field(max_length=120)
+    email: Lower[EmailStr] = Field(max_length=120)
 
 class UserCreate(UserBase):
-    pass
+    password: str = Field(min_length=8)
 
 class UserUpdate(BaseModel):
     username: str | None = Field(default=None, min_length=1, max_length=50)
-    email: EmailStr | None= Field(default=None, max_length=120)
-    image_file: str | None= Field(default=None, min_length=1, max_length=200)
+    email: Lower[EmailStr] | None= Field(default=None, max_length=120)
 
-class UserResponse(UserBase):
+class UserPublic(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: int
+    username: str
     image_file: str | None
     image_path: str
 
+class UserPrivate(UserPublic):
+       email: EmailStr
+
+
 class PostBase(BaseModel):
     title: str = Field(min_length=1, max_length=100)
-    content: str = Field(min_length=1, max_length=100)
-
-
-class PostCreate(BaseModel):
-    title: str = Field(min_length=1, max_length=100)
     content: str = Field(min_length=1)
-    user_id: int
+
+class PostCreate(PostBase):
+    pass
 
 class PostUpdate(BaseModel):
     title: str | None = Field(default=None, min_length=1, max_length=100)
     content: str | None = Field(default=None, min_length=1)
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 class PostResponse(PostBase):
     model_config = ConfigDict(from_attributes=True)
@@ -42,5 +48,17 @@ class PostResponse(PostBase):
     id: int
     user_id: int
     date_posted: datetime
-    author: UserResponse
+    author: UserPublic
+
+class CursorPostsResponse(BaseModel):
+    posts: list[PostResponse]
+    has_more: bool
+    next_cursor: str | None
+    
+class PaginatedPostsResponse(BaseModel):
+    posts: list[PostResponse]
+    total: int
+    skip: int
+    limit: int
+    has_more: bool
 
